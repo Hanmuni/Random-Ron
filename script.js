@@ -1,11 +1,14 @@
 const getQuote = document.querySelector("#get-quote");
-let quote = document.querySelector('#quote');
+let quote = document.querySelector("#quote");
 
-getQuote.addEventListener("click", () => {
+let fetchQuote = () => {
   fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")
     .then((response) => {
-      console.log(response.status);
-      return response.json();
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw response.status;
+      }
     })
     .then((data) => {
       console.log(data);
@@ -14,4 +17,8 @@ getQuote.addEventListener("click", () => {
     .catch((error) => {
       console.warn(error);
     });
-});
+};
+
+getQuote.addEventListener("click", fetchQuote);
+
+fetchQuote();
