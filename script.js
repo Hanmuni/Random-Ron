@@ -1,35 +1,29 @@
 const getQuote = document.querySelector("#get-quote");
 let quote = document.querySelector("#quote");
 let quotes = [];
+let url = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
 
-let fetchQuote = () => {
-  fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw response.status;
-      }
-    })
-    .then((data) => {
-      console.log("This is the API data", data);
+let fetchQuote = async () => {
+  try {
+    let response = await fetch(url);
 
-      if (quotes.length > 45) {
-        quotes.shift();
-      }
+    let data = await response.json();
+    console.log("This is the API data", data);
 
-      if (!quotes.includes(data[0])) {
-        quotes.push(data[0]);
-        quote.textContent = data[0];
-      } else {
-        fetchQuote();
-      }
+    if (quotes.length > 45) {
+      quotes.shift();
+    }
 
+    if (!quotes.includes(data[0])) {
+      quotes.push(data[0]);
       console.log("This is the quotes array", quotes);
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+      quote.textContent = data[0];
+    } else {
+      fetchQuote();
+    }
+  } catch (error) {
+    console.warn(error);
+  }
 };
 
 getQuote.addEventListener("click", fetchQuote);
