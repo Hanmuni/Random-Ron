@@ -7,6 +7,8 @@ let fetchQuote = async () => {
   try {
     let response = await fetch(url);
 
+    if (!response.ok) throw response;
+
     let data = await response.json();
     console.log("This is the API data", data);
 
